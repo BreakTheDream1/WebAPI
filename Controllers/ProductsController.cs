@@ -26,9 +26,12 @@ namespace WebAPI.Controllers
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        public IActionResult Get(int id)
         {
-            return "value";
+            ProductModel product = _db.Products.FirstOrDefault(p => p.Id == id);
+            if(product == null)
+                return BadRequest("Product not found");
+            return Ok(product);
         }
 
         // POST api/values
@@ -46,14 +49,26 @@ namespace WebAPI.Controllers
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public IActionResult Put(int id, [FromBody]ProductModel item)
         {
+            if(!ModelState.IsValid) 
+                return BadRequest("Model invalid");
+
+            _db.Update(item);
+            _db.SaveChanges();
+            return Ok(true);
         }
 
         // DELETE api/values/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(int id)
         {
+            ProductModel product = _db.Products.FirstOrDefault(p => p.Id == id);
+            if(product == null)
+                return BadRequest();
+            _db.Products.Remove(product);
+            _db.SaveChanges();
+            return Ok(true);
         }
     }
 }

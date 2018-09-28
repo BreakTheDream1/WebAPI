@@ -9,7 +9,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
 namespace WebAPI
 {
@@ -31,6 +30,12 @@ namespace WebAPI
                 options.UseSqlServer(connection);
             });
 
+            services.AddCors(options => options.AddPolicy("MyLocalhost", builder => builder
+                .AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                ));
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
@@ -42,6 +47,8 @@ namespace WebAPI
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors("MyLocalhost");
+            //app.UseCors(builder => builder.AllowAnyOrigin());
             app.UseMvc();
         }
     }
