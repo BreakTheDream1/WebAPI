@@ -4,16 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
-public class ApplicationContext : DbContext
-{
-    public DbSet<ProductModel> Products { get; set; }
-    public ApplicationContext(DbContextOptions<ApplicationContext> options)
-        : base(options) { }
-
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+namespace WebAPI.Models {
+    public class ApplicationContext : DbContext
     {
-        base.OnModelCreating(modelBuilder);
+        public DbSet<User> Users { get; set; }
+        public DbSet<Department> Departments { get; set; }
+        public ApplicationContext(DbContextOptions<ApplicationContext> options)
+            : base(options) { }
+
     }
-
 }
-
